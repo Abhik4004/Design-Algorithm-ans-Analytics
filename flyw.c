@@ -10,9 +10,9 @@ int floydWarshal(int **arr, int n)
         {
             for(k = 0; k < n; k ++)
             {
-                if(arr[i][j] > arr[i][k] + arr[k][j])
+                if(arr[j][k] > arr[j][i] + arr[i][k])
                 {
-                    arr[i][j] = arr[i][k] + arr[k][j];
+                    arr[j][k] = arr[j][i] + arr[i][k];
                 }
             }
         }
