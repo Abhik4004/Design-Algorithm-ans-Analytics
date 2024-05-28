@@ -65,6 +65,4 @@ If you'd like to contribute, please fork the repository and use a feature branch
 
 This repository is licensed under the MIT License. See the LICENSE file for more information.
 
-This README provides an overview of the algorithms, brief descriptions, instructions on how to run the programs, and information on contributing and licensing. You can customize it further according to your needs.
-
-This version includes emojis to make the README more playful and engaging. Enjoy! 🎉
+This README provides an overview of the algorithms, brief descriptions, instructions on how to run the programs, and information on contributing and licensing. You can customize it further according to your needs.    
