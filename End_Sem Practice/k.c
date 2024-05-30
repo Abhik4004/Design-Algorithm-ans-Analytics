@@ -1,74 +1,77 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int compare(const void *p1, const void *p2)
-{
-    return(((int(*)[3])p1)[0][2] - ((int(*)[3])p2)[0][2]);
+// Comparator function to use in sorting
+int comparator(const void* p1, const void* p2) {
+    const int(*x)[3] = p1;
+    const int(*y)[3] = p2;
+    return (*x)[2] - (*y)[2];
 }
 
-int makesSet(int p[], int r[], int n)
-{
-    for(int i = 0; i < n; i++)
-    {
-        p[i] = i;
-        r[i] = 0;
+// Initialization of parent[] and rank[] arrays
+void makeSet(int parent[], int rank[], int n) {
+    for (int i = 0; i < n; i++) {
+        parent[i] = i;
+        rank[i] = 0;
     }
 }
 
-int findP(int p[], int c)
-{
-    if(p[c] == c)
-        return c;
-    return findP(p, p[c]);
+// Function to find the parent of a node
+int findParent(int parent[], int component) {
+    if (parent[component] == component)
+        return component;
+    return parent[component] = findParent(parent, parent[component]);
 }
 
-int Uset(int p[], int r[], int u, int v, int n)
-{
-    u = findP(p, u);
-    v = findP(p, v);
-    if(r[u] < r[v])
-        p[u] = v;
-    else if(r[v] < r[u])
-        p[v] = u;
-    else {
-        p[v] = u;
-        r[u]++;
+// Function to unite two sets
+void unionSet(int u, int v, int parent[], int rank[]) {
+    u = findParent(parent, u);
+    v = findParent(parent, v);
+    if (rank[u] < rank[v]) {
+        parent[u] = v;
+    } else if (rank[u] > rank[v]) {
+        parent[v] = u;
+    } else {
+        parent[v] = u;
+        rank[u]++;
     }
 }
 
-int k(int edge[][3], int n)
-{
-    int p[n], r[n], u, v, min = 0, wt;
-    makesSet(p, r, n);
-    qsort(edge, n, sizeof(edge[0]),compare);
-    printf("MST: \n\n");
-    for(int i = 0; i < n; i++)
-    {
-        u = findP(p, edge[i][0]);
-        v = findP(p, edge[i][1]);
-        wt = edge[i][1];
-        if(u != v)
-        {
-            Uset(p, r, u, v, n);
-            min += wt;
-            printf("%d-------------%d | %d\n", edge[i][0], edge[i][1], wt);
+// Function to find the MST
+void kruskalAlgo(int n, int edges[][3], int numEdges) {
+    qsort(edges, numEdges, sizeof(edges[0]), comparator);
+
+    int parent[n];
+    int rank[n];
+    makeSet(parent, rank, n);
+
+    int minCost = 0;
+    printf("Following are the edges in the constructed MST\n");
+    for (int i = 0; i < numEdges; i++) {
+        int u = findParent(parent, edges[i][0]);
+        int v = findParent(parent, edges[i][1]);
+        int wt = edges[i][2];
+        if (u != v) {
+            unionSet(u, v, parent, rank);
+            minCost += wt;
+            printf("%d -- %d == %d\n", edges[i][0], edges[i][1], wt);
         }
     }
 
-    printf("%d is min cost.", min);
-
+    printf("Minimum Cost Spanning Tree: %d\n", minCost);
 }
 
-int main()
-{
-    int edge[][3] = {
+// Driver code
+int main() {
+    int edges[][3] = {
         {0, 1, 10},
         {0, 2, 6},
         {0, 3, 5},
         {1, 3, 15},
         {2, 3, 4}
     };
-    int n = sizeof(edge) / sizeof(edge[0]);
-    k(edge, n);
+    int numVertices = 4; // Number of vertices
+    int numEdges = sizeof(edges) / sizeof(edges[0]);
+    kruskalAlgo(numVertices, edges, numEdges);
     return 0;
 }
