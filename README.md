@@ -1,6 +1,6 @@
 # 🎉 Algorithm Implementations in C 🎉
 
-#Design and Analysis of Algorithms 
+-Design and Analysis of Algorithms 
 
 This repository contains implementations of several classical algorithms in C. The included algorithms are:
 
